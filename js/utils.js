@@ -1,10 +1,9 @@
-console.log('HELLO THERWA')
 var width = window.innerWidth - 20,
     height = window.innerHeight - 20,
     radius = Math.min(width, height) / 2;
 
 var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .range(["#FFE375", "#FCC61C", "#FFAF1C", "#F08A1B", "#D66C1E", "#A9471C", "#8B321C"]);
 
 var arc = d3.svg.arc()
     .outerRadius(radius - 10)
@@ -16,7 +15,7 @@ var labelArc = d3.svg.arc()
 
 var pie = d3.layout.pie()
     .sort(null)
-    .value(function(d) { return d.population; });
+    .value(function(d) { return d.size; });
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -24,7 +23,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-d3.csv("data.csv", type, function(error, data) {
+d3.json("data.json", function(error, data) {
   if (error) throw error;
 
   var g = svg.selectAll(".arc")
@@ -34,16 +33,10 @@ d3.csv("data.csv", type, function(error, data) {
 
   g.append("path")
       .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.age); });
+      .style("fill", function(d) { return color(d.data.key); });
 
   g.append("text")
       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
       .attr("dy", ".35em")
-      .text(function(d) { return d.data.age; });
+      .text(function(d) { return d.data.key; });
 });
-
-function type(d) {
-  d.population = +d.population;
-  return d;
-}
-console.log('DONE HERE')
